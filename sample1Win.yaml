@@ -1,0 +1,43 @@
+common:
+  userComps:
+    -
+      command: KobukiController\build\src\Debug\KobukiControllerComp.exe
+      rtc: KobukiController0.rtc
+real:
+ server:
+       192.168.11.100 
+ userCompConf: 
+       rtcR.conf     
+ remoteComps:   
+      - rtc: KobukiRTC0.rtc 
+ connections:
+       - KobukiRTC0.rtc:currentPose KobukiController0.rtc:currentPose 
+       - KobukiRTC0.rtc:bumper KobukiController0.rtc:bumper
+       - KobukiController0.rtc:targetVelocity KobukiRTC0.rtc:targetVelocity
+sim:
+ server: 
+      localhost 
+ userCompConf: 
+      rtc.conf     
+ supportComps: 
+       - 
+         command: KobukiForChoreonoid\KobukiBridge\build\src\Release\KobukiBridgeComp.exe
+         rtc: KobukiBridge0.rtc
+ choreonoidCommand: choreonoid
+ projects:
+     -
+       path: KobukiForChoreonoid\kobuki.cnoid
+       label: 箱なし
+     -
+       path: KobukiForChoreonoid\kobuki+boxes.cnoid
+       label: 箱あり
+ choreonoidComps:  
+       - rtc: Turtlebot.rtc
+ connections: 
+       - KobukiController0.rtc:targetVelocity KobukiBridge0.rtc:targetVelocity
+       - KobukiBridge0.rtc:bumper KobukiController0.rtc:bumper
+       - KobukiBridge0.rtc:currentPose KobukiController0.rtc:currentPose
+       - Turtlebot.rtc:wheelVelocity KobukiBridge0.rtc:wheelVelocity
+       - Turtlebot.rtc:bumperForce KobukiBridge0.rtc:bumperForce
+       - Turtlebot.rtc:gyro KobukiBridge0.rtc:gyro
+       - KobukiBridge0.rtc:wheelTorque Turtlebot.rtc:wheelTorque
