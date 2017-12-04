@@ -1,3 +1,9 @@
 [submodule "wineggx"]
 	path = wineggx
 	url = https://github.com/MasutaniLab/wineggx.git
+[submodule "KobukiForChoreonoid"]
+	path = KobukiForChoreonoid
+	url = https://github.com/MasutaniLab/KobukiForChoreonoid.git
+[submodule "CraneplusForChoreonoid"]
+	path = CraneplusForChoreonoid
+	url = https://github.com/MasutaniLab/CraneplusForChoreonoid.git
