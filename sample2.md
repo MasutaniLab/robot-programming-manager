@@ -7,7 +7,7 @@
 アールティ社のロボットアームCRANE+を使用し，手先座標で位置決めをする教材である．手先座標系で作業をプログラムすることを想定しているが，ここでは，単純に手先座標を与えているだけである．
 
 <p><img src="images/CRANE_.jpg" title="CRANE+"  width="50%" height="50%" align="right"/></p> 
-
+<p><img src="images/cho2_.jpg" title="choreonoid"  width="20%" height="20%" align="right"/></p> 
 
 ※ WindowsとLinuxのローカルPCは動作確認したが，リモートPCはWindowsのみ
 
@@ -16,58 +16,18 @@
 - DynamixelSDK
   - https://github.com/ROBOTIS-GIT/DynamixelSDK
 ### 設定ファイル
-事例2で使う設定ファイルを以下に示す．
 
-```
-common:
-  userComps:
-       - command: CraneplusController\TkSlider.pyw
-         rtc: TkSlider0.rtc
-       - command: CraneplusController\TkMonitorSlider.pyw
-         rtc: TkMonitorSlider0.rtc
-real:
-  server:
-       192.168.11.100
-  userCompConf: 
-       rtcR.conf     
-  remoteComps:   
-      - rtc: CraneplusWrapper0.rtc   
-      - rtc: Dynamixel0.rtc    
-  connections:
-       - TkSlider0.rtc:slider CraneplusWrapper0.rtc:armTipTarget
-       - CraneplusWrapper0.rtc:goalPosition Dynamixel0.rtc:goalPosition
-       - Dynamixel0.rtc:presentPosition CraneplusWrapper0.rtc:presentPosition
-       - Dynamixel0.rtc:moving CraneplusWrapper0.rtc:moving
-       - CraneplusWrapper0.rtc:armTip TkMonitorSlider0.rtc:value
+事例2で使う設定ファイル．
+
+- Windows
+  - https://github.com/MasutaniLab/robot-programming-manager/blob/master/sample2Win.yaml
+- Linux 
+  - https://github.com/MasutaniLab/robot-programming-manager/blob/master/sample2Linux.yaml
 
 
-sim:
-  server: 
-       localhost 
-  userCompConf: 
-       rtc.conf     
-  supportComps: 
-       -   
-         command: CraneplusWrapper\build\src\Release\CraneplusWrapperComp.exe
-         rtc: CraneplusWrapper0.rtc   
-  choreonoidCommand: choreonoid
-  projects:
-     -
-       path: CraneplusForChoreonoid\craneplus.cnoid
-       label: 関節
-   
-  choreonoidComps: 
-       - rtc: DynamixelSim0.rtc  
-       - rtc: CRANE.rtc
-  connections: 
-       - TkSlider0.rtc:slider CraneplusWrapper0.rtc:armTipTarget
-       - CraneplusWrapper0.rtc:goalPosition DynamixelSim0.rtc:goalPosition
-       - DynamixelSim0.rtc:presentPosition CraneplusWrapper0.rtc:presentPosition
-       - DynamixelSim0.rtc:moving CraneplusWrapper0.rtc:moving
-       - CraneplusWrapper0.rtc:armTip TkMonitorSlider0.rtc:value
-       - CRANE.rtc:angle DynamixelSim0.rtc:angle
-       - DynamixelSim0.rtc:torque CRANE.rtc:torque
-```
+## RTC接続図
+左が実機，右がシミュレーション
+<p><img src="images/real2.jpg" title="実機のRTC接続図"  width="40%" height="40%"/> <img src="images/sim2.jpg" title="シミュレーションのRTC接続図"  width="40%" height="40%"/></p> 
 
 ### リモートRTC
 - CraneplusWrapper0.rtc  
@@ -91,8 +51,7 @@ sim:
 
 - 支援RTC
   - CraneplusWrapper0.rtc  
-    - 支援RTCはこれのみ
-- BodyRTC
+- Choreonoid RTC
   - CRANE.rtc
     - BodyRTC
   - DynamixelSim0.rtc
@@ -112,6 +71,3 @@ sim:
 - TkMonitorSlider
   - 手先座標を表示
 
-## RTC接続図
-左が実機，右がシミュレーション
-<p><img src="images/real2.jpg" title="実機のRTC接続図"  width="40%" height="40%"/> <img src="images/sim2.jpg" title="シミュレーションのRTC接続図"  width="40%" height="40%"/></p> 
