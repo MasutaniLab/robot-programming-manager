@@ -7,7 +7,8 @@
 アールティ社のロボットアームCRANE+を使用し，手先座標で位置決めをする教材である．手先座標系で作業をプログラムすることを想定しているが，ここでは，単純に手先座標を与えているだけである．
 
 <p><img src="images/CRANE_.jpg" title="CRANE+"  width="50%" height="50%" align="right"/></p> 
-<p><img src="images/cho2_.jpg" title="choreonoid"  width="20%" height="20%" align="right"/></p> 
+<br>
+<p><img src="images/cho2_.jpg" title="choreonoid"  width="30%" height="30%" align="right"/></p> 
 
 ※ WindowsとLinuxのローカルPCは動作確認したが，リモートPCはWindowsのみ
 

@@ -9,7 +9,8 @@ Yujin Robot 社の車輪型移動ロボットKobukiのバンパーセンサを�
 
 
 <p><img src="images/KOBUKI_.jpg" title="KOBUKI"  width="35%" height="35%" align="right"/></p> 
-<p><img src="images/cho1_.jpg" title="choreonoid"  width="20%" height="20%" align="right"/></p> 
+<br>
+<p><img src="images/cho1_.jpg" title="choreonoid"  width="30%" height="30%" align="right"/></p> 
 
 
 
