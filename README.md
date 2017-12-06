@@ -12,6 +12,8 @@
 ## 概要
 ロボットプログラミングの学習では実機(車輪ロボット，ロボットアーム等)とシミュレータを切り替えることのできる教材が有用である．大阪電気通信大学では，RTミドルウェアとChoreonoidを利用してそのような教材を構成し授業を行っている．しかし，それらの標準のソフトウェアだけでは，操作が煩雑で学習の妨げになりやすく，実機を複数人で共用する場合にトラブルが起こりがちであった．そこでそのトラブルを解消する支援ツール，ロボットプログラミングマネージャ(RPM)を作成した．
 
+本リポジトリの内容は，RTミドルウェアコンテスト2017にエントリしている作品です．
+
 ## 特徴
 - 実機とシミュレーションを切り替えて使うことができる．
 - 実機RTCを複数PCのRTCから共用することを想定している．
@@ -24,9 +26,10 @@ OpenRTMに必要な操作，コンポーネント起動，接続，アクティ�
 <p><img src="images/rpm.jpg" title="RPM"  width="50%" height="50%" align="right"></p> 
 
 ## 必要なソフトウェア
-- python2.7.10
-- Tkinter,rtctree
-- pyYAML(python 2.7に準ずるならバージョンを問わず)
+- python2.7.10 https://www.python.org/
+- TkInter https://wiki.python.org/moin/TkInter
+- RTCTree https://github.com/gbiggs/rtctree 
+- pyYAML(python 2.7に準ずるならバージョンを問わず) https://github.com/yaml/pyyaml
 
 ## 前提環境
 - Windows
