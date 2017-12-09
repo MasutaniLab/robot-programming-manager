@@ -1,4 +1,4 @@
-# 事例2: ロボットアームCRANE+の制御
+﻿# 事例2: ロボットアームCRANE+の制御
 
 奥野 真之，升谷 保博  
 大阪電気通信大学  
@@ -28,7 +28,7 @@
 
 ## RTC接続図
 左が実機，右がシミュレーション
-<p><img src="images/real2.jpg" title="実機のRTC接続図"  width="40%" height="40%"/> <img src="images/sim2.jpg" title="シミュレーションのRTC接続図"  width="40%" height="40%"/></p> 
+<p><img src="images/crane_real.jpg" title="実機のRTC接続図"  width="40%" height="40%"/> <img src="images/crane_sim.jpg" title="シミュレーションのRTC接続図"  width="40%" height="40%"/></p> 
 
 ### リモートRTC
 - CraneplusWrapper0.rtc  
