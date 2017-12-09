@@ -83,6 +83,7 @@ Yujin Robot 社の車輪型移動ロボットKobukiのバンパーセンサを�
 - KobukiController0.rtc
   - Kobukiから受け取ったデッドレコニングとバンパセンサの値に応じて所定の座標を辿るように速度指令を出力するコンポーネント
   - KobukiControllerと同じディレクトリ位置にwineggx，Linuxの場合はeggxを設置．
+  - [sample1Linux.yaml](https://github.com/MasutaniLab/robot-programming-manager/blob/master/sample1Linux.yaml)と[sample2Win.yaml](https://github.com/MasutaniLab/robot-programming-manager/blob/master/sample1Win.yaml)ではDebugに設定してあるので注意
 
 
 

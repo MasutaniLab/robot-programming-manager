@@ -5,7 +5,7 @@
 2017年12月4日  
 
 <p>
-<img src="images/system.jpg" title="システム概要図"  width="50%" height="50%" align="right">
+<img src="images/system.jpg" title="システム概要図"  width="65%" height="65%" align="right">
 
 </p> 
 
@@ -21,7 +21,8 @@
 - 設定ファイルによって様々なRTCの組み合わせに対応できる．
 - WindowsでもLinuxでも動作する．
 ## 操作の概要
-OpenRTMに必要な操作，コンポーネント起動，接続，アクティベート，ディアクティベート，終了をする．ユーザは基本的にボタンを上から下に押していくだけでそれを行っている．図のように実機の場合はロボット1に対しユーザ多を，シミュレーションの場合は自分のPC(ローカルPC)のみ，の環境を想定している．（下図）
+OpenRTMに必要な操作，コンポーネント起動，接続，アクティベート，ディアクティベート，終了をする．ユーザは基本的にボタンを上から下に押していくだけでそれを行っている．
+図のように実機の場合はロボット1に対しユーザ多を，シミュレーションの場合は自分のPC(ローカルPC)のみ，の環境を想定している．（上図）
 
 <p><img src="images/rpm.jpg" title="RPM"  width="50%" height="50%" align="right"></p> 
 
@@ -35,14 +36,31 @@ OpenRTMに必要な操作，コンポーネント起動，接続，アクティ�
 - Windows
 - Linux
 
+## 用語説明
+- ローカルPC
+  - ユーザが操作するPC．
+- リモートPC
+  - 実機を動かすPC．
+- ユーザRTC
+  - ローカルPCで動作するRTC
+- リモートRTC
+  - リモートPCで動作するRTC
+- 支援RTC
+  - シミュレーション時に使うRTC
+- Choreonoid RTC
+  - ボディRTCやボディRTCのコントローラモジュールのRTC
+
 ## 準備(教材を準備する側)
-- RTCの準備はもちろん，設定ファイルやconfファイルも設定しないといけない．
-- 各コンポーネントをReleaseでビルド
-- ボディRTCのコントローラモジュール
-  - Windows: Releaseでビルドし，その後必ずINSTALLをビルド．
-  - Linux: makeした後make install 
-- 設定ファイルの記述
-  - 詳細はconfig.mdや同リポジトリのyamlファイルを参照
+- リモートPC側の準備
+  - リモートRTCをReleaseでビルド
+  - 固定のIPアドレスに設定
+- 受講生に提供する教材 
+  - 各RTCの準備とRPMやChoreonoidの設定ファイルの設定を行う．
+  - ボディRTCのコントローラモジュールの注意点
+    - Windows: Releaseでビルドし，その後必ずINSTALLをビルド．
+    - Linux: makeした後make install 
+  - 設定ファイルの記述
+    - 詳細は[config.md](https://github.com/MasutaniLab/robot-programming-manager/blob/master/config.md)や同リポジトリのyamlファイルを参照
 詳細は仕様書，事例1，事例2のドキュメント参照
 
 
