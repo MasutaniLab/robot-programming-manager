@@ -224,6 +224,9 @@ def rtcDeactivate(comp):
         c.deactivate_in_ec(0)
     except:
         print "Deactive Fail"
+def rtcReset(comp):
+    c = Tree.get_node(comp)
+    c.reset_in_ec(0)
 
 def rtcRTcon(comps,rtcon):
     for i in range(0,len(rtcon),+1):
@@ -318,8 +321,20 @@ def sRTconnect():
         rtcActivate(i)
             
 def sRTexit(event):
-    Tree.get_node(['/', s_root]).reparse()
-
+    #ボタン押し間違い処理
+    try:
+        Tree.get_node(['/', s_root]).reparse()
+    except:
+        try:
+            Tree.add_name_server(s_root)
+        except:
+            tkMessageBox.showerror('Emergency',"ネームサーバを確認できません")
+            return   
+    for i in s_localcomp:
+        if  not rtcIsComponent(i):
+            tkMessageBox.showerror('Emergency',"ユーザRTCが起動していません")
+            return
+    #ディアクティベート(pythonRTC)
     for i in pyComp:
         rtcDeactivate(i)
         
@@ -330,11 +345,13 @@ def sRTexit(event):
     for i in s_localcomp:
         lcomp.append(i)
 
+    #ディアクティベートを促す
     for i in lcomp:
         m = rtcState(i)
     if m!=1 :
         tkMessageBox.showerror('Error',"ユーザRTC動作中\nシミュレーションを停止してください")
         return
+    #実際にディアクティベート
     else:
         for i in scomp:
             rtcDisconnectAll(i)
@@ -347,6 +364,7 @@ def sRTexit(event):
 
 
 def startSimulator(arg):
+    #実機側を操作していないことを確認
     for i in r_localexe:
         if findProcess(i):
             tkMessageBox.showerror('Error', "実機のユーザRTCを先に終了してください")
@@ -358,6 +376,7 @@ def startSimulator(arg):
     if  findProcess(simName):
         tkMessageBox.showerror('Error', "コレオノイドがすでに起動しています")
         return
+    #コンボボックスに対応したプロジェクトファイルで起動
     try:
         for key,value in s_simexe.iteritems():
             tag = key.find(arg)
@@ -367,14 +386,15 @@ def startSimulator(arg):
         for i in s_remoteexe:
             startExe(i)
     except:
-        print("Exception")
-        return
+        tkMessageBox.showerror('Error', "支援RTCを起動できませんでした\nビルドや設定ファイルを確認してください")
+        return 
 
 def sStartController(event):
     if OS == 'windows':
         simName = "choreonoid.exe"
     elif OS == 'linux':
         simName = "choreonoid"
+    #エラー処理
     if not findProcess(simName):
         tkMessageBox.showerror('Error', "コレオノイドを先に起動してください")
         return
@@ -383,13 +403,14 @@ def sStartController(event):
         Tree.get_node(['/', s_root]).reparse()
     except:
         tkMessageBox.showerror('Error', "choreonoidでネームサーバがうまく動作していません\nChoreonoidでシミュレーションを一瞬実行してみてください")
-        return        
+        return
+    #ユーザRTC起動
     try:
         for i in s_localexe:
             startExe(i)
     except:
-        print("Exception")
-        return
+        tkMessageBox.showerror('Error', "ユーザRTCを起動できませんでした\nビルドや設定ファイルを確認してください")
+        return 
     sRTconnect()
 
 def finishSimulator(event):
@@ -398,15 +419,22 @@ def finishSimulator(event):
         if findProcess(i):
             tkMessageBox.showerror('Error', "ユーザRTCを先に終了してください")
             return
-
-    for i in s_remoteexe:
-        finishExe(i)
+        
     if OS == 'windows':
         simName = "choreonoid.exe"
         cname = "cnoid-nameserver.exe"
     elif OS == 'linux':
         simName = "choreonoid"
         cname ="cnoid-nameserver"
+    #ボタン押し間違い処理
+    if not findProcess(simName):
+        tkMessageBox.showerror('Error', "コレオノイドが存在しません")
+        return
+    for i in s_remoteexe:
+        if not findProcess(i):
+            tkMessageBox.showerror('Error', "支援RTCが存在しません")
+        else:
+            finishExe(i)
     finishExe(cname)
     finishExe(simName)
 
@@ -501,22 +529,75 @@ def rRtconnect():
     #confResetting(r_root)
 
 def rActivate(event):
-    Tree.get_node(['/', r_root]).reparse()
+    #ボタン押し間違い処理
+    try:
+        Tree.get_node(['/', r_root]).reparse()
+    except:
+        try:
+            Tree.add_name_server(r_root)
+        except:
+            tkMessageBox.showerror('Emergency',"ネームサーバを確認できません")
+            return        
+    for i in r_localcomp:
+        if  not rtcIsComponent(i):
+            tkMessageBox.showerror('Emergency',"ユーザRTCが起動していません")
+            return
+    for i in r_remotecomp:
+        if rtcState(i) != 1:
+            tkMessageBox.showerror('Error', "搭載PC側の"+i[len(i)-1]+"コンポーネントが待機中でありません")
+            return
+    #アクティベート
     for i in r_remotecomp:
         rtcActivate(i)
     for i in r_localcomp:
         rtcActivate(i)
 
 def rDeactivate(event):
-    Tree.get_node(['/', r_root]).reparse()
-    for i in r_remotecomp:
-        rtcDeactivate(i)
+    #ボタン押し間違い処理
+    try:
+        Tree.get_node(['/', r_root]).reparse()
+    except:
+        try:
+            Tree.add_name_server(r_root)
+        except:
+            tkMessageBox.showerror('Emergency',"ネームサーバを確認できません")
+            return
+    for i,j in zip(r_localcomp,r_remotecomp):
+        if  not rtcIsComponent(i):
+            tkMessageBox.showerror('Emergency',"ユーザRTCが起動していません")
+            return
+        elif rtcState(i) == 1:
+            tkMessageBox.showwarning('Notification',"ユーザRTCがアクティベート中ではりません")
+        if  not rtcIsComponent(j):
+            tkMessageBox.showerror('Emergency',"サポートRTCが起動していません")
+            return
+        elif rtcState(j) == 1:
+            tkMessageBox.showwarning('Notification',"サポ－とRTCがアクティベート中ではりません")
+    #ディアクティベート，エラーの場合はリセット
     for i in r_localcomp:
         rtcDeactivate(i)
+        if rtcState(i) == 3:
+            tkMessageBox.showwerror('Emergency',i[len(i)-1]+" がエラーを起こしました\nリセットします")
+            rtcReset(i)
+    for i in r_remotecomp:
+        rtcDeactivate(i)
+
 
 def rRTexit(event):
-    Tree.get_node(['/', r_root]).reparse()
-    srcomp=[]
+    #ボタン押し間違い処理
+    try:
+        Tree.get_node(['/', r_root]).reparse()
+    except:
+        try:
+            Tree.add_name_server(r_root)
+        except:
+            tkMessageBox.showerror('Emergency',"ネームサーバを確認できません")
+            return
+    for i in r_localcomp:
+        if  not rtcIsComponent(i):
+            tkMessageBox.showerror('Emergency',"ユーザRTCが起動していません")
+            return
+    #ディアクティベートを促す
     for i in r_localcomp:
         if rtcState(i) != 1:
             tkMessageBox.showerror('Notification',"ユーザRTC動作中\nディアクティベートしてください")
@@ -686,7 +767,7 @@ def main():
 
     ButtonS12 = TK.Button(text=u'シミュ', width=7+lin_simb,height=1)
     ButtonS12.place(x=Bbasex + simX + 70,y=Bbasey)
-    ButtonS12.bind("<Enter>",lambda R0 : Message("コレオノイド\nサポートRTCを起動"))
+    ButtonS12.bind("<Enter>",lambda R0 : Message("コレオノイド\n支援RTCを起動"))
     ButtonS12.bind("<ButtonRelease-1>",lambda x: startSimulator(comboS1.get()))
 
     ButtonS2 = TK.Button(text=u'ユーザRTC起動', width=17+lin_button,height=1)
@@ -704,7 +785,7 @@ def main():
 
     ButtonS4 = TK.Button(text=u'終了', width=17+lin_button,height=1)
     ButtonS4.place(x=Bbasex + simX,y=Bbasey + space*5)
-    ButtonS4.bind("<Enter>",lambda R0 : Message("終了"))
+    ButtonS4.bind("<Enter>",lambda R0 : Message("コレオノイド\n支援RTCを終了"))
     ButtonS4.bind("<ButtonRelease-1>",finishSimulator)
 
     root.mainloop()
