@@ -549,6 +549,8 @@ def configrationsetting():
 def main():
     Bbasex = 10
     Bbasey = 35
+    space = 35
+    simX = 250
     if OS=="linux":
         lin_Ulab=-2
         lin_Clab=-1
@@ -580,31 +582,47 @@ def main():
     def closeButton():
         tkMessageBox.showerror('Error', "閉じるボタンは使わないでください")
     root.protocol('WM_DELETE_WINDOW', closeButton)
+    def exitMain():
+       root.destroy()
+       Fexperi = open('anticipateYAML','w')
+       Fexperi.write(Filename)
+       Fexperi.close()
     def finishANDstart():
         for i in commonexe:
             if findProcess(i):
                 tkMessageBox.showerror('Error', "ユーザRTCを終了してください")
                 return
-        subprocess.Popen(sys.argv[0], shell=True, stdout=subprocess.PIPE)
+        try:
+            os.remove('anticipateYAML')
+        except:
+            print "File nothing. No problem"
+        subprocess.Popen(sys.argv[0], shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         root.destroy()
     #root.after_idle(root.attributes,'-topmost',False)
 
     #メニュー
     menu_root = TK.Menu(root)
     root.configure(menu = menu_root)
-    menu_Option = TK.Menu(menu_root,tearoff=False)
-    menu_root.add_cascade(label='Option',menu=menu_Option,underline=0)
-    menu_Option.add_command(label='Reload YAML',under=0,command=finishANDstart)
-    menu_Option.add_command(label='Configure Set',under=0,command=configrationsetting)
+
+    menu_FILE = TK.Menu(menu_root,tearoff=False)
+    menu_root.add_cascade(label='FILE',menu=menu_FILE,underline=0)
+    menu_conf = TK.Menu(menu_root,tearoff=False)
+    menu_root.add_cascade(label='Configuration',menu=menu_conf,underline=0)
+    
+    menu_FILE.add_command(label='Load YAML',under=0,command=finishANDstart)
+    menu_FILE.add_command(label='EXIT',under=0,command=exitMain)
+    
+    menu_conf.add_command(label='Configure Set',under=0,command=configrationsetting)
 
     #左下ラベル
     global HelpMessage
+    labely=215
     HelpMessage = TK.Label(root, text=u"ボタン上にカーソルを置くと\nそのボタンの処理を表示", foreground="#000000", bg=Llabelcolor, width=19+lin_Ulab, height=2, anchor=TK.N)
-    HelpMessage.place(x=5, y=Bbasey + 215)
+    HelpMessage.place(x=5, y=Bbasey + labely)
     #右下ラベル
     ip = socket.gethostbyname(socket.gethostname())
     ipex = TK.Label(root,text="あなたのIPアドレスは\n" + ip,bg=Clabelcolor,width=19+lin_Ulab,height=2,anchor=TK.N)
-    ipex.place(x=255,y=Bbasey + 215)
+    ipex.place(x=255,y=Bbasey + labely)
     ###########################################
     #真ん中ラベル
     lposx = 150
@@ -620,8 +638,12 @@ def main():
     l5.place(x=lposx,y=Bbasey + 140+lin_Cmlab)
     l6 = TK.Label(root,text="ロボット側終了",width=13+lin_Clab,bg=Rlabelcolor)
     l6.place(x=lposx,y=Bbasey + 175+lin_Cmlab)
+
     def exitMain(event):
        root.destroy()
+       Fexperi = open('anticipateYAML','w')
+       Fexperi.write(Filename)
+       Fexperi.close()
     ButtonC = TK.Button(text=u'マネージャ終了', width=13+lin_button, height=2)
     ButtonC.place(x=lposx, y=Bbasey + 210)
     ButtonC.bind("<Enter>", lambda x: Message("マネージャ終了"))
@@ -632,23 +654,23 @@ def main():
     Real.place(x = 5, y = 10)
 
     ButtonR1 = TK.Button(text=u'ユーザRTC起動', width=17+lin_button,height=1)
-    ButtonR1.place(x=Bbasex,y=Bbasey + 35)
+    ButtonR1.place(x=Bbasex,y=Bbasey + space)
     ButtonR1.bind("<Enter>",lambda R0 : Message("ユーザRTC起動\nコンポーネント接続"))
     ButtonR1.bind("<ButtonRelease-1>", rStartController)
 
 
     ButtonR2 = TK.Button(text=u'アクティベート', width=17+lin_button,height=1)
-    ButtonR2.place(x=Bbasex,y=Bbasey + 70)
+    ButtonR2.place(x=Bbasex,y=Bbasey + space*2)
     ButtonR2.bind("<Enter>",lambda R0 : Message("実機アクティベート"))
     ButtonR2.bind("<ButtonRelease-1>", rActivate)
 
     ButtonR3 = TK.Button(text=u'ディアクティベート', width=17+lin_button,height=1)
-    ButtonR3.place(x=Bbasex,y=Bbasey + 105)
+    ButtonR3.place(x=Bbasex,y=Bbasey + space*3)
     ButtonR3.bind("<Enter>",lambda R0 : Message("実機ディアクティベート"))
     ButtonR3.bind("<ButtonRelease-1>",rDeactivate)
 
     ButtonR4 = TK.Button(text=u'ユーザRTC終了', width=17+lin_button,height=1)
-    ButtonR4.place(x=Bbasex,y=Bbasey + 140)
+    ButtonR4.place(x=Bbasex,y=Bbasey + space*4)
     ButtonR4.bind("<Enter>",lambda R0 : Message("ユーザRTC終了"))
     ButtonR4.bind("<ButtonRelease-1>",rRTexit)
 
@@ -663,25 +685,25 @@ def main():
     comboS1.current(0)
 
     ButtonS12 = TK.Button(text=u'シミュ', width=7+lin_simb,height=1)
-    ButtonS12.place(x=Bbasex + 250 + 70,y=Bbasey)
+    ButtonS12.place(x=Bbasex + simX + 70,y=Bbasey)
     ButtonS12.bind("<Enter>",lambda R0 : Message("コレオノイド\nサポートRTCを起動"))
     ButtonS12.bind("<ButtonRelease-1>",lambda x: startSimulator(comboS1.get()))
 
     ButtonS2 = TK.Button(text=u'ユーザRTC起動', width=17+lin_button,height=1)
-    ButtonS2.place(x=Bbasex + 250,y=Bbasey + 35)
+    ButtonS2.place(x=Bbasex + simX,y=Bbasey + space)
     ButtonS2.bind("<Enter>",lambda R1 : Message("ユーザRTC起動\nコンポーネント接続"))
     ButtonS2.bind("<ButtonRelease-1>",sStartController)
 
     S1 = TK.Label(root,text="コレオノイド側で\n操作してください",width=17+lin_simlab,height=4,bg=simcho_labelcolor)
-    S1.place(x=Bbasex + 250,y=Bbasey + 70)
+    S1.place(x=Bbasex + 250,y=Bbasey + space*2)
 
     ButtonS3 = TK.Button(text=u'ユーザRTC終了', width=17+lin_button,height=1)
-    ButtonS3.place(x=Bbasex + 250,y=Bbasey + 140)
+    ButtonS3.place(x=Bbasex + simX,y=Bbasey + space*4)
     ButtonS3.bind("<Enter>",lambda R0 : Message("ユーザRTC終了"))
     ButtonS3.bind("<ButtonRelease-1>",sRTexit)
 
     ButtonS4 = TK.Button(text=u'終了', width=17+lin_button,height=1)
-    ButtonS4.place(x=Bbasex + 250,y=Bbasey + 175)
+    ButtonS4.place(x=Bbasex + simX,y=Bbasey + space*5)
     ButtonS4.bind("<Enter>",lambda R0 : Message("終了"))
     ButtonS4.bind("<ButtonRelease-1>",finishSimulator)
 
@@ -697,7 +719,9 @@ def main():
 
 ##二つめのコンフィグレーション設定ウィンドウ
 def confdestroy():
-    root1.destroy()   
+    global root1
+    root1.destroy()
+    root1=None  
 def confResetting(nroot):
     combox = 10
     comboy = 25
@@ -706,22 +730,16 @@ def confResetting(nroot):
     root1 = TK.Toplevel()
     root1.title(u"コンフィグレーション設定")
     root1.geometry(str(400)+"x"+str(80)+"+410+500")
-    def confdestroyMenu():
-        global root1
-        root1.destroy()
-        root1=None 
     menu_root1 = TK.Menu(root1)
     root1.configure(menu = menu_root1)
     menu_Option1 = TK.Menu(menu_root1,tearoff=False)
     menu_root1.add_cascade(label='Option',menu=menu_Option1,underline=0)
-    menu_Option1.add_command(label='EXIT',under=0,command=confdestroyMenu)
+    menu_Option1.add_command(label='EXIT',under=0,command=confdestroy)
 
-    
     combo = ttk.Combobox(root1, state='readonly',values=commonComp, width=40,height=1)
     combo.place(x=combox,y=comboy)
     combo.current(0)
-    
-        
+            
     ButtonS12 = TK.Button(root1,text=u"表示", width=7,height=1)
     ButtonS12.place(x=combox+320,y=comboy-2)
     ButtonS12.bind("<ButtonRelease-1>",lambda x: confSET(combo.get(),nroot))
@@ -1008,34 +1026,43 @@ def yamlread():
     s_rtcon = sim["connections"]
 
     #コンポーネントをリスト化
-    r_localcomp=compInsert(r_localcomp,r_root)
-    r_remotecomp=compInsert(r_remotecomp,r_root)
-    s_localcomp=compInsert(s_localcomp,s_root)
-    s_remotecomp=compInsert(s_remotecomp,s_root)
-    pyComp=compInsert(pyComp,s_root)
+    r_localcomp = compInsert(r_localcomp,r_root)
+    r_remotecomp = compInsert(r_remotecomp,r_root)
+    s_localcomp = compInsert(s_localcomp,s_root)
+    s_remotecomp = compInsert(s_remotecomp,s_root)
+    pyComp = compInsert(pyComp,s_root)
 
     
 def fileread():
     Filesel = TK.Tk()
     Filesel.withdraw()
 
-    fName=[('設定ファイル','*.yaml')]
-    Dir='./'
+    fName = [('設定ファイル','*.yaml')]
+    Dir = './'
 
     try:
-        Filename=tkFileDialog.askopenfilename(filetypes=fName,initialdir=Dir)
+        Filename = tkFileDialog.askopenfilename(filetypes=fName,initialdir=Dir)
     except:
         Filesel.destroy()
         sys.exit()
     print Filename
-    if Filename=="":
+    if Filename == "":
         sys.exit()
     Filesel.destroy()
     return Filename
 
 if __name__ == "__main__":
-  Filename=fileread()
+  args = sys.argv
+  if len(args) >= 2:
+      Filename = args[1]
+  else:
+      try:
+          lastfile = open('anticipateYAML','r')
+          Filename = lastfile.readline()
+          lastfile.close()
+      except:
+          Filename = fileread()
+
   filecheck(Filename)
   yamlread()
   main()
-
