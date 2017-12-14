@@ -58,7 +58,7 @@
      - シミュレーションの場合は，Choreonoidから起動されるcnoid-namingを使う．
 
 ## 設定ファイル
-  - 概要はここで説明し，詳細は別ドキュメントで．
+  - 概要と詳細は[config.md](https://github.com/MasutaniLab/robot-programming-manager/blob/master/config.md)で説明する．
   - WIndowsとLinuxとの使い分け．
 
 ## 設定ファイルの読み込み方法
