@@ -572,7 +572,8 @@ def rDeactivate(event):
             tkMessageBox.showerror('Emergency',"サポートRTCが起動していません")
             return
         elif rtcState(j) == 1:
-            tkMessageBox.showwarning('Notification',"サポ－とRTCがアクティベート中ではりません")
+            tkMessageBox.showwarning('Notification',"サポートRTCがアクティベート中ではりません")
+            return
     #ディアクティベート，エラーの場合はリセット
     for i in r_localcomp:
         rtcDeactivate(i)
@@ -1082,7 +1083,7 @@ def yamlread():
         r_localcomp.append("${HOST_CXT}/"+i)
     for i in real["remoteComps"]:
         r_remotecomp.append(i["rtc"])
-        r_rtcon = real["connections"]
+    r_rtcon = real["connections"]
     
     #sim
     sim = data["sim"]
